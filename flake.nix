@@ -239,6 +239,8 @@
               dpkg
               nix-prefetch
               nixfmt
+              gnupg
+              python3
             ];
           };
         }

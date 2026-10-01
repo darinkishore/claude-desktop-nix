@@ -1,5 +1,10 @@
 # claude-desktop-nix
 
+This is Darin's reviewed `vendor` branch. Updates are manual, inherited CI
+automation is removed, and the updater verifies Anthropic's signature and
+the complete artifact hash chain. See [VENDOR.md](VENDOR.md) for the fork's
+policy; the upstream automation descriptions below describe upstream only.
+
 Anthropic's first-party **Claude Desktop for Linux**, packaged for Nix from the
 official `.deb` at `downloads.claude.ai`.
 
