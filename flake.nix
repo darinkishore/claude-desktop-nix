@@ -163,8 +163,10 @@
               printf '#!%s\nprintf "%%s\\n" "$1" > %s/opened\n' \
                 ${pkgs.runtimeShell} "$PWD" > fake/xdg-open
               chmod +x fake/xdg-open
+              ${pkgs.python3}/bin/python3 ${./pkgs/browser-shim.py} extract \
+                "$app/lib/claude-desktop/resources" "$PWD/browser-shim.js"
               env -i PATH=${pkgs.coreutils}/bin:$PWD/fake HOME=$PWD \
-                $app/lib/claude-desktop/resources/claude-browser-shim.js \
+                "$PWD/browser-shim.js" \
                 https://example.com/opened-by-shim 2> shim-stderr \
                 || { echo "FAIL: the browser shim exited non-zero"; cat shim-stderr; exit 1; }
               if [ -s shim-stderr ]; then

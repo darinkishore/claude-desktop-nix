@@ -8,6 +8,7 @@
   autoPatchelfHook,
   makeWrapper,
   wrapGAppsHook3,
+  python3,
 
   # buildInputs — every entry below is justified by a "not found" soname in the
   # `ldd` sweep of the .deb payload (see README "Dependency provenance").
@@ -264,6 +265,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     dpkg
+    python3
     autoPatchelfHook
     makeWrapper
     # Electron still needs GSettings schemas and the gdk-pixbuf loader cache
@@ -365,8 +367,10 @@ stdenv.mkDerivation (finalAttrs: {
     # call printed "//usr/bin/true: No such file or directory" three times
     # before carrying on. `/` + a store path keeps the leading `//`: still a
     # JS comment, still a path sh can run.
-    substituteInPlace $out/lib/claude-desktop/resources/claude-browser-shim.js \
-      --replace-fail '//usr/bin/true' '/${coreutils}/bin/true'
+    # 4.29.0 moved the same helper into app.asar/resources. Preserve every
+    # other entry and update the modified entry's integrity metadata.
+    python3 ${./browser-shim.py} patch "$out/lib/claude-desktop/resources" \
+      '${coreutils}/bin/true'
     ${lib.optionalString gnomeSearchProvider ''
 
       # What upstream's postinst writes into /usr/share, with its two /usr

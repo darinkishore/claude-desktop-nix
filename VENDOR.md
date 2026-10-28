@@ -36,6 +36,14 @@ its own CLI/uv at runtime, and configured MCP servers/extensions can introduce
 their own dependencies. This fork does not make those runtime downloads
 reproducible or establish that the closed-source app is harmless.
 
+Claude Desktop 4.29.0 moved `claude-browser-shim.js` into
+`app.asar/resources/`. `pkgs/browser-shim.py` repairs either reviewed layout,
+requires the exact three-line polyglot prologue, validates the packed input's
+integrity and updates that entry's SHA-256 metadata. Other archive entries and
+payload bytes remain unchanged. `tests/browser-shim.py` covers both layouts,
+corruption, ambiguity and prologue drift; `checks.nixos-host-paths` extracts the
+installed helper and executes its URL fallback without a real browser.
+
 On Dusk, the ambient `LD_AUDIT` runtime-compat hook causes this GnuPG build
 to abort with stack smashing before it runs. Invoke the update command as
 `env -u LD_AUDIT -u LD_LIBRARY_PATH nix develop -c bash pkgs/update.sh` there
